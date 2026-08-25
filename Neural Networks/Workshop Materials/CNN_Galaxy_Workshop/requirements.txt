@@ -1,0 +1,12 @@
+fastai==2.8.2
+fastcore==1.8.5
+fastdownload==0.0.7
+fastjsonschema @ file:///home/conda/feedstock_root/build_artifacts/python-fastjsonschema_1733235979760/work/dist
+fastprogress==1.0.3
+fasttransform==0.0.2
+matplotlib==3.9.3
+numpy==2.2.6
+scikit-image==0.25.0
+scikit-learn==1.6.1
+torch==2.7.1
+torchvision==0.22.1
