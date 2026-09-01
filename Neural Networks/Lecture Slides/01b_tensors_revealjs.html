@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="01b_tensors_files/libs/clipboard/clipboard.min.js"></script>
+<script src="01b_tensors_files/libs/quarto-html/tabby.min.js"></script>
+<script src="01b_tensors_files/libs/quarto-html/popper.min.js"></script>
+<script src="01b_tensors_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="01b_tensors_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="01b_tensors_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="01b_tensors_files/libs/quarto-html/quarto-syntax-highlighting-acf12a64177840b8d86f2d4f01b2e9fb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="01b_tensors_files/libs/quarto-contrib/videojs/video.min.js"></script>
+<link href="01b_tensors_files/libs/quarto-contrib/videojs/video-js.css" rel="stylesheet"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.9.37">
+
+  <title>Neural Networks</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="01b_tensors_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="01b_tensors_files/libs/revealjs/dist/reveal.css">
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+      }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    div.sourceCode
+      { color: #24292e;  }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #24292e; } /* Normal */
+    code span.al { color: #ff5555; font-weight: bold; } /* Alert */
+    code span.an { color: #6a737d; } /* Annotation */
+    code span.at { color: #d73a49; } /* Attribute */
+    code span.bn { color: #005cc5; } /* BaseN */
+    code span.bu { color: #d73a49; } /* BuiltIn */
+    code span.cf { color: #d73a49; } /* ControlFlow */
+    code span.ch { color: #032f62; } /* Char */
+    code span.cn { color: #005cc5; } /* Constant */
+    code span.co { color: #6a737d; } /* Comment */
+    code span.cv { color: #6a737d; } /* CommentVar */
+    code span.do { color: #6a737d; } /* Documentation */
+    code span.dt { color: #d73a49; } /* DataType */
+    code span.dv { color: #005cc5; } /* DecVal */
+    code span.er { color: #ff5555; text-decoration: underline; } /* Error */
+    code span.ex { color: #d73a49; font-weight: bold; } /* Extension */
+    code span.fl { color: #005cc5; } /* Float */
+    code span.fu { color: #6f42c1; } /* Function */
+    code span.im { color: #032f62; } /* Import */
+    code span.in { color: #6a737d; } /* Information */
+    code span.kw { color: #d73a49; } /* Keyword */
+    code span.op { color: #24292e; } /* Operator */
+    code span.ot { color: #6f42c1; } /* Other */
+    code span.pp { color: #d73a49; } /* Preprocessor */
+    code span.re { color: #6a737d; } /* RegionMarker */
+    code span.sc { color: #005cc5; } /* SpecialChar */
+    code span.ss { color: #032f62; } /* SpecialString */
+    code span.st { color: #032f62; } /* String */
+    code span.va { color: #e36209; } /* Variable */
+    code span.vs { color: #032f62; } /* VerbatimString */
+    code span.wa { color: #ff5555; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="01b_tensors_files/libs/revealjs/dist/theme/quarto-6c1625bbff91f5c2f1448275287d6a99.css">
+  <link href="01b_tensors_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="01b_tensors_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="01b_tensors_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="01b_tensors_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Neural Networks</h1>
+  <p class="subtitle">Tensors, Vectors &amp; Gradients<br>
+CosmicAI Summer School 2026</p>
+
+<div class="quarto-title-authors">
+</div>
+
+</section>
+<section class="slide level2">
+
+<p>Lecture 01: one neuron drew one line.</p>
+<p>Before we stack them into networks, we need the language the whole field is written in: <strong>shapes</strong>.</p>
+<p>Every layer, every image, every gradient is a box of numbers with a shape. Get the shapes right and the rest follows.</p>
+</section>
+<section id="where-this-fits" class="slide level2 smaller scrollable">
+<h2>Where this fits</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 6%">
+<col style="width: 20%">
+<col style="width: 31%">
+<col style="width: 41%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Topic</th>
+<th>Slide deck</th>
+<th>Notebook</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>Single neuron</td>
+<td><code>01_single_neuron.pdf</code></td>
+<td><code>01_single_neuron.ipynb</code></td>
+</tr>
+<tr class="even">
+<td><strong>→ 1b</strong></td>
+<td><strong>Tensors &amp; network shape</strong></td>
+<td><strong><code>01b_tensors.pdf</code></strong> <em>(this deck)</em></td>
+<td><strong><code>01b_tensors.ipynb</code></strong></td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>Multilayer networks</td>
+<td><code>02_multilayer_networks.pdf</code></td>
+<td><code>02_training_loop.ipynb</code></td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td>Backpropagation</td>
+<td><code>03_backprop_training.pdf</code></td>
+<td><code>03_backpropagation.ipynb</code></td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td>Optimizers</td>
+<td><code>07_optimizers.pdf</code></td>
+<td><code>04_optimizers.ipynb</code></td>
+</tr>
+<tr class="even">
+<td>5</td>
+<td>CNNs</td>
+<td><code>04_cnns.pdf</code></td>
+<td><code>05_cnns.ipynb</code></td>
+</tr>
+<tr class="odd">
+<td>6</td>
+<td>Modern architectures</td>
+<td><code>05a_attention.pdf</code></td>
+<td><em>(bonus: <code>bonus_generative_models.ipynb</code>)</em></td>
+</tr>
+<tr class="even">
+<td>7</td>
+<td>Bayesian inference</td>
+<td><code>06_bayesian_inference.pdf</code></td>
+<td><code>06_bayesian_inference.ipynb</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Coming from:</strong> Lecture 01 — one neuron’s output <span class="math inline">\(\hat{y} = \sigma(\mathbf{w}\cdot\mathbf{x} + b)\)</span> for one input vector.</p>
+<p><strong>Leading to:</strong> Lecture 02 writes <code>X @ w + b</code> and <code>nn.Sequential(...)</code>; this deck explains where those shapes come from.</p>
+<p><strong>If you skipped ahead:</strong> You need the single-neuron equation and the idea of a derivative. Nothing more.</p>
+</section>
+<section id="the-bug-everyone-hits-first" class="slide level2">
+<h2>The bug everyone hits first</h2>
+<p>You will write your first network. It will fail with something like:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a href=""></a>RuntimeError: mat1 and mat2 shapes cannot be multiplied (5x2 and 8x1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This is not a deep-learning error. It is a <strong>shape</strong> error.</p>
+<p><strong>The claim of this lecture:</strong> almost everything you do — a neuron, a layer, a whole U-Net, even the gradient — is a rule for turning one shaped box of numbers into another. Learn to read shapes and you can read any architecture.</p>
+</section>
+<section id="pytorch-in-60-seconds" class="slide level2">
+<h2>PyTorch in 60 seconds</h2>
+<p>PyTorch is <em>“NumPy that runs on a GPU and remembers how to differentiate itself.”</em> If you know NumPy arrays, you know most of <code>torch.Tensor</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href=""></a>a <span class="op">=</span> torch.tensor([<span class="fl">1.</span>, <span class="fl">2.</span>, <span class="fl">3.</span>])   <span class="co"># create</span></span>
+<span id="cb2-2"><a href=""></a>r <span class="op">=</span> torch.randn(<span class="dv">2</span>, <span class="dv">3</span>)            <span class="co"># random, shape (2,3)</span></span>
+<span id="cb2-3"><a href=""></a>r.shape, r.dtype, r.device      <span class="co"># inspect: the 3 questions to always ask</span></span>
+<span id="cb2-4"><a href=""></a>a <span class="op">+</span> <span class="dv">10</span>,  a <span class="op">*</span> a,  a.mean()        <span class="co"># operate: elementwise + reductions</span></span>
+<span id="cb2-5"><a href=""></a>M[<span class="dv">0</span>],  M[:, <span class="dv">1</span>]                   <span class="co"># index / slice, just like NumPy</span></span>
+<span id="cb2-6"><a href=""></a>a.numpy(),  a.item(),  a.to(device)   <span class="co"># convert / move to GPU</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Everything in this lecture — data, weights, images, gradients — is a <code>torch.Tensor</code>. The one habit worth building: <strong>print <code>.shape</code> constantly.</strong></p>
+</section>
+<section id="the-linear-algebra-you-need" class="slide level2">
+<h2>The linear algebra you need</h2>
+<p>Neural networks use a small slice of linear algebra. Three operations carry almost everything:</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 24%">
+<col style="width: 42%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Operation</th>
+<th>Shapes</th>
+<th>What it <em>is</em></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>dot</strong> <span class="math inline">\(\mathbf{w}\cdot\mathbf{x}\)</span></td>
+<td><span class="math inline">\((n)\cdot(n)\to\)</span> scalar</td>
+<td>one neuron</td>
+</tr>
+<tr class="even">
+<td><strong>matrix × vector</strong> <span class="math inline">\(W\mathbf{x}\)</span></td>
+<td><span class="math inline">\((H,n)\times(n)\to(H)\)</span></td>
+<td>one input, <span class="math inline">\(H\)</span> neurons</td>
+</tr>
+<tr class="odd">
+<td><strong>matrix × matrix</strong> <span class="math inline">\(XW\)</span></td>
+<td><span class="math inline">\((N,n)\times(n,H)\to(N,H)\)</span></td>
+<td>a <strong>batch</strong>, <span class="math inline">\(H\)</span> neurons</td>
+</tr>
+</tbody>
+</table>
+<p>Plus <strong>transpose</strong> (swap axes so inner dims line up) and <strong>reductions</strong> (<code>sum</code>, <code>mean</code>, <code>norm</code> — the loss is a reduction to one number).</p>
+<p>The dot product is a one-neuron layer. The matrix multiply is that same idea for every neuron and every example at once.</p>
+</section>
+<section id="a-neural-network-in-one-picture" class="slide level2">
+<h2>A neural network in one picture</h2>
+<p>Five words: <strong>multiply, add, bend, repeat, score.</strong></p>
+<p><span class="math display">\[\mathbf{x}
+\xrightarrow[W_1,\mathbf{b}_1]{\text{mult+add}} \mathbf{z}_1
+\xrightarrow[\sigma]{\text{bend}} \mathbf{a}_1
+\xrightarrow[W_2,\mathbf{b}_2]{\text{mult+add}} \hat{\mathbf{y}}
+\xrightarrow[\text{loss}]{\text{score}} L\]</span></p>
+<ul>
+<li><strong>multiply + add</strong> — <code>X @ W + b</code>, a linear map (rotate, scale, shift)</li>
+<li><strong>bend</strong> — a non-linear <span class="math inline">\(\sigma\)</span>; without it, stacked layers collapse to one linear map</li>
+<li><strong>repeat</strong> — chain blocks; “deep” just means many</li>
+<li><strong>score</strong> — the loss collapses prediction + truth to <strong>one scalar</strong> <span class="math inline">\(L\)</span> to minimise</li>
+</ul>
+<p>Everything that follows is this picture, traced by its shapes.</p>
+</section>
+<section id="the-forward-pass-animated" class="slide level2 center">
+<h2>The forward pass, animated</h2>
+<video id="video_shortcode_videojs_video1" width="900" height="480" class="video-js vjs-default-skin vjs-big-play-centered " controls="" preload="auto" data-setup="{}" title=""><source src="../forward_prop.webm"></video>
+<p>Multiply, add, bend, repeat, score — the same picture, in motion.</p>
+</section>
+<section id="scalars-vectors-tensors" class="slide level2">
+<h2>Scalars, vectors, tensors</h2>
+<p>A <strong>tensor</strong> is a box of numbers with a fixed number of axes.</p>
+<ul>
+<li><strong>rank</strong> = number of axes</li>
+<li><strong>shape</strong> = length along each axis</li>
+</ul>
+<table class="caption-top">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 15%">
+<col style="width: 50%">
+<col style="width: 18%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Rank</th>
+<th>Name</th>
+<th>Astronomy example</th>
+<th>Shape</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>scalar</td>
+<td>one flux measurement</td>
+<td><code>()</code></td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>vector</td>
+<td>a galaxy’s colours <span class="math inline">\((g\!-\!r,\ r\!-\!i)\)</span></td>
+<td><code>(2,)</code></td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>matrix</td>
+<td>a batch of galaxies, or a grayscale image</td>
+<td><code>(N, 2)</code> / <code>(H, W)</code></td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td>3-tensor</td>
+<td>a batch of images, or a multi-band image</td>
+<td><code>(N, H, W)</code> / <code>(C, H, W)</code></td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td>4-tensor</td>
+<td>a batch of multi-band images</td>
+<td><code>(N, C, H, W)</code></td>
+</tr>
+</tbody>
+</table>
+<p>A vector is a list of numbers. A matrix is a grid. A tensor is the same idea with as many axes as you need. <strong>Nothing more mysterious than that.</strong></p>
+</section>
+<section id="the-batch-dimension" class="slide level2">
+<h2>The batch dimension</h2>
+<p>The first axis is almost always the <strong>batch</strong>: independent examples stacked together.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href=""></a>one_galaxy  <span class="op">=</span> torch.tensor([<span class="fl">0.35</span>, <span class="fl">0.12</span>])   <span class="co"># shape (2,)     one example</span></span>
+<span id="cb3-2"><a href=""></a>many_galaxy <span class="op">=</span> torch.randn(<span class="dv">200</span>, <span class="dv">2</span>)          <span class="co"># shape (200, 2) a batch of 200</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>A network processes all <code>N</code> examples <strong>at once</strong>. The maths for one example is repeated in parallel across the batch — the shape carries the loop for you.</p>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p>This is why you almost never write <code>for galaxy in dataset:</code>. You feed the whole <code>(N, 2)</code> block through and let the matrix multiply do all <code>N</code> at once. This is also <em>why GPUs matter</em> — they do that parallel work.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="same-numbers-different-shapes" class="slide level2">
+<h2>Same numbers, different shapes</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>A galaxy is a vector.</strong></p>
+<p><span class="math display">\[\mathbf{x} = (g\!-\!r,\ r\!-\!i) \in \mathbb{R}^2\]</span></p>
+<p>Two features, shape <code>(2,)</code>.</p>
+<p>A batch of 200 galaxies is a matrix, shape <code>(200, 2)</code>.</p>
+</div><div class="column" style="width:50%;">
+<p><strong>An image is a matrix.</strong></p>
+<p>A <span class="math inline">\(32\times32\)</span> sky patch is shape <code>(32, 32)</code>.</p>
+<p>A convolutional network wants it as <code>(N, C, H, W)</code> — batch, channels, height, width — even for one grayscale image:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href=""></a>img.unsqueeze(<span class="dv">0</span>).unsqueeze(<span class="dv">0</span>)</span>
+<span id="cb4-2"><a href=""></a><span class="co"># (32,32) -&gt; (1, 1, 32, 32)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></div>
+<p>The data never changes — only how we <em>arrange</em> it into axes. <strong>Notebook Part 0</strong> builds each of these and prints its shape.</p>
+</section>
+<section id="reshaping-same-numbers-new-axes" class="slide level2">
+<h2>Reshaping: same numbers, new axes</h2>
+<p>A tensor’s numbers are one flat run in memory; the <em>shape</em> is just a lens on it. Rearranging axes is (almost) free:</p>
+<ul>
+<li><strong><code>reshape</code> / <code>flatten</code></strong> — regroup the same elements, same order. <code>-1</code> = “infer this axis”.</li>
+<li><strong><code>transpose</code> / <code>.T</code></strong> — swap axes; this genuinely <em>reorders</em> the data.</li>
+<li><strong><code>unsqueeze</code> / <code>squeeze</code></strong> — add / remove a length-1 axis.</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href=""></a>imgs <span class="op">=</span> torch.randn(<span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">32</span>, <span class="dv">32</span>)   <span class="co"># (N, C, H, W)</span></span>
+<span id="cb5-2"><a href=""></a>imgs.reshape(<span class="dv">4</span>, <span class="op">-</span><span class="dv">1</span>)                <span class="co"># (4, 1024)  flatten for a dense layer</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The transpose hides inside <code>nn.Linear</code>, which stores its weight as <code>(out, in)</code> and computes <code>X @ W.T</code>. <strong>Notebook: interactive reshape cell.</strong></p>
+</section>
+<section id="broadcasting-and-the-silent-bug" class="slide level2">
+<h2>Broadcasting — and the silent bug</h2>
+<p>Tensors of <em>different</em> shapes can still be combined. <strong>Broadcasting</strong> rule:</p>
+<blockquote>
+<p>Line the shapes up <strong>from the right</strong>. Any axis that is length-<code>1</code> (or missing) is stretched to match — without copying data.</p>
+</blockquote>
+<p>This is why <code>Z + b</code> works: a bias <code>(H,)</code> stretches across all <code>N</code> rows of <code>(N, H)</code>.</p>
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Warning</strong></p>
+</div>
+<div class="callout-content">
+<p>It is also the #1 <strong>silent</strong> bug. A <code>(N,1)</code> prediction minus a <code>(N,)</code> target does <strong>not</strong> error — it broadcasts to <code>(N, N)</code> and quietly corrupts the loss.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href=""></a>y_hat.shape, y.shape        <span class="co"># (100, 1), (100,)</span></span>
+<span id="cb6-2"><a href=""></a>(y_hat <span class="op">-</span> y).shape           <span class="co"># (100, 100)  &lt;-- NOT (100,) !</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+<p>The notebook has a <strong>widget</strong> to combine shapes and spot the trap.</p>
+</section>
+<section id="one-neuron-one-dot-product" class="slide level2">
+<h2>One neuron = one dot product</h2>
+<p>From Lecture 01, a single neuron takes a weight <strong>vector</strong> and an input <strong>vector</strong> and returns one number:</p>
+<p><span class="math display">\[z = \mathbf{w}\cdot\mathbf{x} + b = \sum_i w_i x_i + b
+\qquad (2,)\cdot(2,) \to \text{scalar}\]</span></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href=""></a>w <span class="op">=</span> torch.randn(<span class="dv">2</span>)        <span class="co"># weight VECTOR, shape (2,)</span></span>
+<span id="cb7-2"><a href=""></a>x <span class="op">=</span> torch.randn(<span class="dv">2</span>)        <span class="co"># one galaxy,    shape (2,)</span></span>
+<span id="cb7-3"><a href=""></a>z <span class="op">=</span> x <span class="op">@</span> w <span class="op">+</span> b             <span class="co"># a single number</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The dot product is the smallest possible “shape collapse”: two length-2 vectors go in, one scalar comes out. Every layer is built from this.</p>
+</section>
+<section id="a-layer-a-matrix-multiply" class="slide level2">
+<h2>A layer = a matrix multiply</h2>
+<p>Want <span class="math inline">\(H\)</span> neurons instead of one? Give each its own weight vector and stack them as <strong>columns of a matrix</strong> <span class="math inline">\(W \in \mathbb{R}^{2 \times H}\)</span>.</p>
+<p>Process a whole batch <span class="math inline">\(X \in \mathbb{R}^{N\times 2}\)</span> at once:</p>
+<p><span class="math display">\[Z = X\,W + \mathbf{b},
+\qquad \underbrace{(N,2)}_{X}\ \times\ \underbrace{(2,H)}_{W}\ \to\ \underbrace{(N,H)}_{Z}\]</span></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href=""></a>X <span class="op">=</span> torch.randn(<span class="dv">200</span>, <span class="dv">2</span>)      <span class="co"># batch of galaxies</span></span>
+<span id="cb8-2"><a href=""></a>W <span class="op">=</span> torch.randn(<span class="dv">2</span>, <span class="dv">8</span>)        <span class="co"># 8 neurons, each a weight vector</span></span>
+<span id="cb8-3"><a href=""></a>Z <span class="op">=</span> X <span class="op">@</span> W <span class="op">+</span> b                <span class="co"># (200,2) @ (2,8) -&gt; (200,8)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>A weight <strong>vector</strong> became a weight <strong>matrix</strong>. That is the <em>entire</em> jump from a neuron to a layer. <strong>Notebook Part 1.</strong></p>
+</section>
+<section id="matrix-multiply-one-cell-at-a-time" class="slide level2 center">
+<h2>Matrix multiply, one cell at a time</h2>
+
+<img data-src="figs/01b/fig_matmul.png" style="width:100.0%" class="r-stretch quarto-figure-center"><p class="caption">Each output cell is one <strong>row of <span class="math inline">\(X\)</span></strong> · one <strong>column of <span class="math inline">\(W\)</span></strong>. The shared inner <code>2</code> is consumed; the outer <code>N</code> and <code>H</code> survive.</p></section>
+<section id="the-one-rule-for-matrix-multiply" class="slide level2">
+<h2>The one rule for matrix multiply</h2>
+<p><span class="math display">\[\underbrace{(N,\ \mathbf{2})}_{X}\ \times\ \underbrace{(\mathbf{2},\ H)}_{W}\ \to\ (N,\ H)\]</span></p>
+<p><strong>Inner dimensions must match and cancel. Outer dimensions survive.</strong></p>
+<ul>
+<li>The <code>2</code> (input features) is <em>consumed</em> — it must agree on both sides.</li>
+<li><code>N</code> (batch) and <code>H</code> (neurons out) <em>survive</em> into the result.</li>
+</ul>
+<p>That failed error message from earlier — <code>(5x2 and 8x1)</code> — is just the inner dims <code>2</code> and <code>8</code> refusing to cancel.</p>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Tip</strong></p>
+</div>
+<div class="callout-content">
+<p>Debugging networks is 90% checking that <code>(batch, in) @ (in, out)</code> lines up at every layer. Print <code>.shape</code>. Always.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="two-layers-different-shapes-one-loss" class="slide level2">
+<h2>Two layers, different shapes, one loss</h2>
+<p>Stack two layers with <strong>deliberately different</strong> weight shapes:</p>
+<p><span class="math display">\[\underbrace{X}_{(N,2)}
+\xrightarrow{\;W_1\,(2,8)\;} \underbrace{H_1}_{(N,8)}
+\xrightarrow{\text{ReLU}} \underbrace{A_1}_{(N,8)}
+\xrightarrow{\;W_2\,(8,1)\;} \underbrace{\hat{y}}_{(N,1)}
+\xrightarrow{\text{MSE}} \underbrace{L}_{()}\]</span></p>
+<p><span class="math inline">\(W_1\)</span> is <code>(2,8)</code>, <span class="math inline">\(W_2\)</span> is <code>(8,1)</code> — totally different. They chain because the <strong>8 out of layer 1 is exactly the 8 into layer 2.</strong> That single agreement is all that makes a network well-formed.</p>
+<p>However wide or deep, everything funnels to a <strong>single scalar loss</strong> <code>()</code> — the one number we minimise. <strong>Notebook Part 2.</strong></p>
+</section>
+<section id="what-is-a-gradient" class="slide level2">
+<h2>What is a gradient?</h2>
+<p>For one number in, one number out, the gradient is just the <strong>slope</strong> — how much <span class="math inline">\(L\)</span> changes if you nudge the input.</p>
+<p>With many parameters, the gradient is the <strong>vector of all the partial slopes</strong>:</p>
+<p><span class="math display">\[\nabla_{\mathbf{w}} L =
+\left(\frac{\partial L}{\partial w_1},\
+\frac{\partial L}{\partial w_2},\ \dots\right)\]</span></p>
+<ul>
+<li>Each entry: “if I increase <em>this one</em> weight, does the loss go up or down?”</li>
+<li>The gradient <strong>points uphill</strong> — toward larger loss.</li>
+<li>So to <em>reduce</em> loss, step in the <strong>opposite</strong> direction.</li>
+</ul>
+<p>A gradient is not exotic. It is one slope per parameter, packed into a tensor.</p>
+</section>
+<section id="gradient-descent" class="slide level2">
+<h2>Gradient descent</h2>
+<video id="video_shortcode_videojs_video2" width="900" height="510" class="video-js vjs-default-skin vjs-big-play-centered " controls="" preload="auto" data-setup="{}" title=""><source src="../gradient_descent.webm"></video>
+<p><span class="math display">\[\mathbf{w} \leftarrow \mathbf{w} - \eta\,\nabla_{\mathbf{w}} L\]</span></p>
+<p>Step downhill by a small amount <span class="math inline">\(\eta\)</span> (the learning rate), repeat. This is the entire learning algorithm — the notebook’s training loop is just this line run thousands of times.</p>
+</section>
+<section id="feature-scaling-what-shapes-cant-show" class="slide level2">
+<h2>Feature scaling — what shapes can’t show</h2>
+<p>Shapes tell you the maths is <em>legal</em>. They say nothing about whether it <em>converges</em>. The most common reason a correctly-shaped network won’t learn is <strong>unscaled inputs</strong>.</p>
+<div class="columns">
+<div class="column" style="width:52%;">
+<p>One shared step size <span class="math inline">\(\eta\)</span> must serve every weight. But a feature’s gradient scales with its magnitude. If one column is ~500× larger than another, their gradients differ by orders of magnitude — no single <span class="math inline">\(\eta\)</span> works. The loss surface becomes a long thin valley: the optimiser crawls, or diverges.</p>
+</div><div class="column" style="width:48%;">
+<p><strong>Fix — standardise</strong> each feature:</p>
+<p><span class="math display">\[x' = \frac{x - \mu}{\sigma}\]</span></p>
+<p>so every input column has mean <span class="math inline">\(\approx 0\)</span>, std <span class="math inline">\(\approx 1\)</span>.</p>
+<p>Same data, same shape — dramatically better conditioning. Use the <strong>training</strong> <span class="math inline">\(\mu,\sigma\)</span> on val/test too.</p>
+</div></div>
+<p>The notebook has a <strong>widget</strong>: slide feature-scale × learning-rate and watch raw diverge while standardised converges.</p>
+</section>
+<section id="gradients-have-the-same-shape-as-their-parameters" class="slide level2">
+<h2>Gradients have the same shape as their parameters</h2>
+<p>This is the fact that ties gradients back to shapes:</p>
+<p><span class="math display">\[\text{shape}\big(\nabla_{W} L\big) = \text{shape}(W)\]</span></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href=""></a>W1 <span class="op">=</span> torch.randn(<span class="dv">2</span>, <span class="dv">8</span>, requires_grad<span class="op">=</span><span class="va">True</span>)   <span class="co"># weight  (2, 8)</span></span>
+<span id="cb9-2"><a href=""></a>W2 <span class="op">=</span> torch.randn(<span class="dv">8</span>, <span class="dv">1</span>, requires_grad<span class="op">=</span><span class="va">True</span>)   <span class="co"># weight  (8, 1)</span></span>
+<span id="cb9-3"><a href=""></a>loss.backward()</span>
+<span id="cb9-4"><a href=""></a>W1.grad.shape        <span class="co"># (2, 8)  &lt;- same as W1</span></span>
+<span id="cb9-5"><a href=""></a>W2.grad.shape        <span class="co"># (8, 1)  &lt;- same as W2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Of course it must: there is exactly <strong>one slope per weight</strong>, so the bag of slopes has exactly the same shape as the bag of weights. The update <span class="math inline">\(W \leftarrow W - \eta\,\nabla_W L\)</span> then subtracts two identically-shaped tensors. <strong>Notebook Part 2.</strong></p>
+</section>
+<section id="loss.backward-in-one-line" class="slide level2">
+<h2><code>loss.backward()</code> in one line</h2>
+<p>You will not compute those partials by hand. PyTorch records every operation and applies the chain rule backward through them:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href=""></a>y_hat <span class="op">=</span> torch.relu(X <span class="op">@</span> W1 <span class="op">+</span> b1) <span class="op">@</span> W2 <span class="op">+</span> b2   <span class="co"># forward: shapes flow FORWARD</span></span>
+<span id="cb10-2"><a href=""></a>loss  <span class="op">=</span> torch.mean((y_hat <span class="op">-</span> y) <span class="op">**</span> <span class="dv">2</span>)        <span class="co"># collapse to a scalar ()</span></span>
+<span id="cb10-3"><a href=""></a>loss.backward()                             <span class="co"># gradients flow BACKWARD</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li><strong>Forward:</strong> shapes go <code>(N,2) → (N,8) → (N,1) → ()</code>.</li>
+<li><strong>Backward:</strong> gradients retrace the same path, each with its parameter’s shape.</li>
+</ul>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p>Lecture 03 opens up <code>backward()</code> and derives the chain rule. For today: it fills every <code>.grad</code> with a same-shaped gradient. That is all you need.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="shape-is-architecture-u-net" class="slide level2">
+<h2>Shape <em>is</em> architecture — U-Net</h2>
+<p>So far shapes only got narrower: <code>2 → 8 → 1</code>. For images, architectures also reshape <strong>space</strong>. The U-Net is the clearest example — its name <em>is</em> a picture of the spatial size:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb11-1"><a href=""></a>  input  (1, 32, 32)</span>
+<span id="cb11-2"><a href=""></a>     | encoder: conv, then downsample  (halve H,W; grow channels)</span>
+<span id="cb11-3"><a href=""></a>   (16, 16, 16)</span>
+<span id="cb11-4"><a href=""></a>   (32,  8,  8)   &lt;- bottleneck: smallest space, most channels</span>
+<span id="cb11-5"><a href=""></a>     | decoder: upsample  (double H,W; shrink channels)</span>
+<span id="cb11-6"><a href=""></a>   (32, 16, 16) --concat-- skip from encoder (32, 16, 16)</span>
+<span id="cb11-7"><a href=""></a>   (16, 32, 32) --concat-- skip from encoder (16, 32, 32)</span>
+<span id="cb11-8"><a href=""></a>  output (1, 32, 32)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The <strong>“U” is a plot of <code>(H, W)</code></strong>: down the left arm, bottom, up the right arm.</p>
+</section>
+<section id="reading-the-u-net-by-its-shapes" class="slide level2">
+<h2>Reading the U-Net by its shapes</h2>
+<div class="columns">
+<div class="column" style="width:52%;">
+<p>The notebook’s <code>MiniUNet</code> prints its own shape trace:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb12-1"><a href=""></a>input        (4,  1, 32, 32)</span>
+<span id="cb12-2"><a href=""></a>enc1         (4, 16, 32, 32)</span>
+<span id="cb12-3"><a href=""></a>enc2         (4, 32, 16, 16)</span>
+<span id="cb12-4"><a href=""></a>bottleneck   (4, 64,  8,  8)</span>
+<span id="cb12-5"><a href=""></a>up2          (4, 32, 16, 16)</span>
+<span id="cb12-6"><a href=""></a>cat+dec2     (4, 32, 16, 16)</span>
+<span id="cb12-7"><a href=""></a>up1          (4, 16, 32, 32)</span>
+<span id="cb12-8"><a href=""></a>cat+dec1     (4, 16, 32, 32)</span>
+<span id="cb12-9"><a href=""></a>output       (4,  1, 32, 32)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div><div class="column" style="width:48%;">
+<p><strong>Two things to notice:</strong></p>
+<ol type="1">
+<li><p>Spatial size <span class="math inline">\(32 \to 16 \to 8 \to 16 \to 32\)</span>. That path is literally the letter <strong>U</strong>.</p></li>
+<li><p>The skip connections <code>torch.cat([up, enc])</code> only work because the encoder feature and the decoder feature have the <strong>same shape</strong> at each level (<code>16×16</code> meets <code>16×16</code>).</p></li>
+</ol>
+<p><strong>An architecture is a set of shape-matching constraints.</strong> Nothing more.</p>
+</div></div>
+</section>
+<section id="same-training-bigger-tensors" class="slide level2">
+<h2>Same training, bigger tensors</h2>
+<p>The U-Net has 56,689 parameters and works on <code>(N,1,32,32)</code> images instead of <code>(N,2)</code> vectors. But <strong>nothing about learning changed</strong>:</p>
+<ul>
+<li>forward pass produces a prediction,</li>
+<li>MSE collapses it to a single scalar loss <code>()</code>,</li>
+<li><code>loss.backward()</code> fills each parameter’s <code>.grad</code> (same shape as the parameter),</li>
+<li>gradient descent steps downhill.</li>
+</ul>
+<p>A <code>(2,8)</code> weight matrix and a <code>(32,16,16)</code> feature map are trained by the <em>exact same four steps</em>. Scale is just bigger boxes of numbers.</p>
+</section>
+<section id="open-the-notebook" class="slide level2">
+<h2>Open the notebook</h2>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong><code>01b_tensors.ipynb</code></strong></p>
+</div>
+<div class="callout-content">
+<p>A quick PyTorch + linear-algebra warm-up, then — with <strong>interactive widgets</strong>:</p>
+<ul>
+<li>build tensors of every rank; reshape, flatten, and <strong>broadcast</strong> them (<strong>Part 0</strong>)</li>
+<li>slide the neuron count and watch a layer’s output shape track it (<strong>Part 1</strong>)</li>
+<li>chain two differently-shaped layers into one scalar loss and train it (<strong>Part 2</strong>)</li>
+<li>drag feature-scale × learning-rate to see standardisation rescue training</li>
+<li>change the U-Net channel width and watch its shape trace + denoise sky images (<strong>Part 3</strong>)</li>
+</ul>
+</div>
+</div>
+</div>
+<p>The whole notebook is one idea: <strong>watch the shapes, and the network stops being magic.</strong></p>
+</section>
+<section id="references" class="slide level2">
+<h2>References</h2>
+<p><strong>Videos &amp; blogs</strong></p>
+<ul>
+<li>3Blue1Brown — <em>But what is a neural network?</em> youtube.com/watch?v=aircAruvnKk — the layer-as-matrix picture</li>
+<li>3Blue1Brown — <em>Gradient descent, how neural networks learn</em> youtube.com/watch?v=IHZwWFHWaw</li>
+</ul>
+<p><strong>Papers</strong></p>
+<ul>
+<li>Ronneberger, Fischer &amp; Brox (2015) — <em>U-Net: Convolutional Networks for Biomedical Image Segmentation.</em> MICCAI. arxiv.org/abs/1505.04597</li>
+</ul>
+<p><strong>Reference</strong></p>
+<ul>
+<li>PyTorch docs — <em>Tensors</em> and <em>broadcasting semantics</em> pytorch.org/docs/stable/tensors.html</li>
+</ul>
+
+</section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="01b_tensors_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="01b_tensors_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="01b_tensors_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="01b_tensors_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="01b_tensors_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="01b_tensors_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="01b_tensors_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="01b_tensors_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="01b_tensors_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="01b_tensors_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': true,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    <script>videojs(video_shortcode_videojs_video1);</script>
+    <script>videojs(video_shortcode_videojs_video2);</script>
+    
+
+</body></html>
