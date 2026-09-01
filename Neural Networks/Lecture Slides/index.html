@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CosmicAI Summer School 2026 — Neural Networks</title>
+<style>
+  :root { color-scheme: light dark; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    max-width: 760px; margin: 0 auto; padding: 2.5rem 1.25rem 4rem;
+    line-height: 1.5; color: #1b1f24; background: #fbfcfe;
+  }
+  @media (prefers-color-scheme: dark) {
+    body { color: #e6e9ef; background: #0f1319; }
+    a.card { background: #171c24; border-color: #263041; }
+    a.card:hover { border-color: #3b82f6; }
+    .num { background: #263041; color: #9db2d3; }
+  }
+  h1 { font-size: 1.6rem; margin: 0 0 .25rem; }
+  p.sub { color: #6b7686; margin: 0 0 2rem; }
+  a.card {
+    display: flex; align-items: center; gap: 1rem;
+    text-decoration: none; color: inherit;
+    border: 1px solid #dde3ec; border-radius: 12px;
+    padding: .85rem 1.1rem; margin-bottom: .6rem; background: #fff;
+    transition: border-color .12s ease, transform .12s ease;
+  }
+  a.card:hover { border-color: #3b82f6; transform: translateY(-1px); }
+  .num {
+    flex: 0 0 auto; width: 2.4rem; height: 2.4rem;
+    display: grid; place-items: center; border-radius: 8px;
+    background: #eef2f8; color: #3b5b8c; font-weight: 700; font-size: .95rem;
+  }
+  .meta { display: flex; flex-direction: column; }
+  .title { font-weight: 600; }
+  .desc { font-size: .85rem; color: #6b7686; }
+  .bonus .num { background: #f4ecff; color: #7c4dcf; }
+  @media (prefers-color-scheme: dark) { .bonus .num { background: #2a2440; color: #b79cf0; } }
+  footer { margin-top: 2rem; font-size: .8rem; color: #6b7686; }
+</style>
+</head>
+<body>
+  <h1>Neural Networks</h1>
+  <p class="sub">CosmicAI Summer School 2026 — lecture slide decks. Click any deck; use arrow keys to advance, <kbd>F</kbd> for fullscreen, <kbd>S</kbd> for speaker notes.</p>
+
+  <a class="card" href="Slides/01_single_neuron_revealjs.html">
+    <div class="num">1</div>
+    <div class="meta"><span class="title">Single neuron</span>
+      <span class="desc">One neuron, one decision line</span></div></a>
+
+  <a class="card" href="Slides/01b_tensors_revealjs.html">
+    <div class="num">1b</div>
+    <div class="meta"><span class="title">Tensors, vectors &amp; gradients</span>
+      <span class="desc">Shapes — the language of the field</span></div></a>
+
+  <a class="card" href="Slides/02_multilayer_networks_revealjs.html">
+    <div class="num">2</div>
+    <div class="meta"><span class="title">Multilayer networks</span>
+      <span class="desc">Stacking neurons; universal approximation</span></div></a>
+
+  <a class="card" href="Slides/03_backprop_training_revealjs.html">
+    <div class="num">3</div>
+    <div class="meta"><span class="title">Backpropagation</span>
+      <span class="desc">The chain rule that trains everything</span></div></a>
+
+  <a class="card" href="Slides/07_optimizers_revealjs.html">
+    <div class="num">4</div>
+    <div class="meta"><span class="title">Optimizers</span>
+      <span class="desc">SGD, momentum, Adam, schedules</span></div></a>
+
+  <a class="card" href="Slides/04_cnns_revealjs.html">
+    <div class="num">5</div>
+    <div class="meta"><span class="title">Convolutional neural networks</span>
+      <span class="desc">Images; plus practical architecture choice</span></div></a>
+
+  <a class="card" href="Slides/05a_attention_revealjs.html">
+    <div class="num">6</div>
+    <div class="meta"><span class="title">Modern architectures — attention</span>
+      <span class="desc">Self-attention and transformers</span></div></a>
+
+  <a class="card" href="Slides/06_bayesian_inference_revealjs.html">
+    <div class="num">7</div>
+    <div class="meta"><span class="title">Bayesian inference &amp; uncertainty</span>
+      <span class="desc">Priors, posteriors, MCMC, BNNs, SBI</span></div></a>
+
+  <a class="card bonus" href="Slides/bonus_generative_models_revealjs.html">
+    <div class="num">★</div>
+    <div class="meta"><span class="title">Bonus — Generative models</span>
+      <span class="desc">VAEs, GANs, diffusion, contrastive (self-paced)</span></div></a>
+
+  <footer>Each deck is self-contained. Videos load from this folder — keep the folder structure intact when copying.</footer>
+</body>
+</html>
